@@ -1,0 +1,41 @@
+#See https://docs.docker.com/engine/reference/builder/
+# FROM 089465505731.dkr.ecr.ap-southeast-1.amazonaws.com/jenkins_buildah_dotnet_sdk_aspnet:aspnet-6.0 AS base
+FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 8080
+ARG TRACER_VERSION    
+RUN apt-get update -y && \
+    apt-get -y install curl 
+RUN echo 'install dotnet tracer' && \
+    mkdir -p /opt/datadog \
+    && mkdir -p /var/log/datadog \
+    && curl -LO https://github.com/DataDog/dd-trace-dotnet/releases/download/v${TRACER_VERSION}/datadog-dotnet-apm_${TRACER_VERSION}_amd64.deb \
+    && dpkg -i ./datadog-dotnet-apm_${TRACER_VERSION}_amd64.deb \
+    && rm ./datadog-dotnet-apm_${TRACER_VERSION}_amd64.deb
+#ENV HTTP2ONLY_PORT=8080
+
+ARG tag=NA
+ENV IMAGE_TAG=${tag}
+
+ARG asmver=NA
+ENV ASSEMBLY_VERSION=${asmver}
+
+# FROM 089465505731.dkr.ecr.ap-southeast-1.amazonaws.com/jenkins_buildah_dotnet_sdk_aspnet:sdk-6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+ARG asmver
+WORKDIR /src
+COPY ["nuget.config", "."]
+COPY src .
+WORKDIR /src/ThreeDomainServer.CardRanges.Service
+RUN dotnet restore
+RUN dotnet build  -c Release -o /app/build -p:Version=${asmver:-0.0.0.0}
+
+FROM build AS publish
+ARG asmver
+RUN dotnet publish -c Release -o /app/publish -p:Version=${asmver:-0.0.0.0} -p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "ThreeDomainServer.CardRanges.Service.dll"]

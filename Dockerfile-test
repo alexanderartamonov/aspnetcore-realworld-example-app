@@ -1,0 +1,61 @@
+
+FROM docker.io/arm64v8/ubuntu:latest as agent
+ARG DEBIAN_FRONTEND=noninteractive
+RUN useradd build \
+&& apt-get -y update \
+&& apt-get -y install \
+curl \
+wget \
+apt-transport-https \
+libvshadow-utils \
+libssl-dev \
+tzdata \
+libicu-dev \
+&& rm -rf  /var/log/apt* /var/log/apt.*;
+
+
+#To install the .NET SDK, run the following commands
+RUN mkdir -p /usr/share/dotnet \
+    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet \
+    && wget https://dot.net/v1/dotnet-install.sh \
+    && chmod +x dotnet-install.sh \
+    && ./dotnet-install.sh -c 6.0 --install-dir /usr/share/dotnet
+ARG TRACER_VERSION
+RUN echo 'install dotnet tracer' && \
+    mkdir -p /opt/datadog \
+    && mkdir -p /var/log/datadog \
+    && curl -LO https://github.com/DataDog/dd-trace-dotnet/releases/download/v${TRACER_VERSION}/datadog-dotnet-apm_${TRACER_VERSION}_arm64.deb \
+    && dpkg -i ./datadog-dotnet-apm_${TRACER_VERSION}_arm64.deb \
+    && /opt/datadog/createLogPath.sh \
+    && rm ./datadog-dotnet-apm_${TRACER_VERSION}_arm64.deb
+ARG tag=NA
+ENV IMAGE_TAG=${tag}
+
+ARG asmver=1.0.0.0
+ENV ASSEMBLY_VERSION=${asmver}
+FROM agent as base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 8080
+ENV DEBIAN_FRONTEND noninteractive
+RUN uname -m
+
+FROM base AS build
+
+WORKDIR /src
+COPY ["nuget.config", "."]
+COPY src .
+WORKDIR /src/ThreeDomainServer.CardRanges.Service
+RUN dotnet restore
+RUN dotnet build --arch arm64 -c Release -o /app/build -p:Version=${asmver:-0.0.0.0}
+
+FROM build AS publish
+ARG asmver
+RUN dotnet publish --arch arm64 -c Release -o /app/publish -p:Version=${asmver:-0.0.0.0} -p:UseAppHost=false
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "ThreeDomainServer.CardRanges.Service.dll"]
+
+

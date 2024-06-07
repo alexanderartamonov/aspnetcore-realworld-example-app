@@ -1,0 +1,35 @@
+kind: Pod
+spec:
+  serviceAccountName: jenkins-agent
+  containers:
+  - name: buildah
+    image: 670440716409.dkr.ecr.ap-southeast-1.amazonaws.com/dotnet_sdk6:latest
+    imagePullPolicy: Always
+    resources:
+       limits:
+          memory: "4096Mi"
+          cpu: "2000m"
+       requests:
+          memory: "2048Mi"
+          cpu: "1000m"
+    securityContext:
+      privileged: true
+    command:
+    - sleep
+    args:
+    - 9999999
+    env :
+    - name: JENKINS_SCM_SSH
+      valueFrom:
+        secretKeyRef:
+          name: jenkins-scm-ssh
+          key: jenkins-scm-ssh
+  nodeSelector:
+    kubernetes.io/os: linux
+    kubernetes.io/arch: amd64
+    node.kubernetes.io/prod-jenkins-cluster-ng-minimum-linux-emvacs: ""
+  tolerations: 
+    - key: "emvacspod"
+      operator: "Equal"
+      value: "true"
+      effect: "NoExecute"
