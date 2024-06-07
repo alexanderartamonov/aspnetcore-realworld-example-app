@@ -8,13 +8,13 @@ spec:
   - name: jnlp
     image: 670440716409.dkr.ecr.ap-southeast-1.amazonaws.com/jenkins-buildah-multiarch:alpine-latest
     imagePullPolicy: Always
-    # resources:
-    #    limits:
-    #       memory: "2048Mi"
-    #       cpu: "1000m"
-    #    requests:
-    #       memory: "1024Mi"
-    #       cpu: "512m"
+    resources:
+       limits:
+          memory: "2048Mi"
+          cpu: "1000m"
+       requests:
+          memory: "1024Mi"
+          cpu: "512m"
     securityContext:
       privileged: true
     env :
