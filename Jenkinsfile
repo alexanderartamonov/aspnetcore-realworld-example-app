@@ -68,7 +68,7 @@ def getVars(project, env) {
 def getVars(project) {
   if (project == 'CARDRANGESERVICE') {
     return [
-            project_dir: "./", 
+            project_dir: "", 
             project_ecr: "3dssv2_card_range_service", 
     ] as java.lang.Object
   }
@@ -235,7 +235,7 @@ pipeline {
                                 echo Build your multi-architecture container
                                 docker build \
                                 --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
-                                -f ${PROJECT_DIR}/Dockerfile-test \
+                                -f ${PROJECT_DIR}/Dockerfile \
                                 --platform=linux/arm64  \
                                 -t ${ECR_TAGGED_IMG}-arm64 .
                                 docker push ${ECR_TAGGED_IMG}-arm64
