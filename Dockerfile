@@ -23,17 +23,18 @@ RUN echo 'install dotnet tracer' && \
     && /opt/datadog/createLogPath.sh \
     && rm ./datadog-dotnet-apm_${TRACER_VERSION}_arm64.deb
     
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 ARG asmver
+WORKDIR /src
+# COPY ["nuget.config", "."]
 COPY src .
 WORKDIR /src/Conduit
-RUN ls -la .
-RUN dotnet restore Conduit.csproj
-RUN dotnet build Conduit.csproj -c Release -o /app/build 
+RUN dotnet restore
+RUN dotnet build  -c Release -o /app/build 
 
 FROM build AS publish
 ARG asmver
-RUN dotnet publish Conduit.csproj -c Release -o /app/publish  -p:UseAppHost=false
+RUN dotnet publish -c Release -o /app/publish -p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
