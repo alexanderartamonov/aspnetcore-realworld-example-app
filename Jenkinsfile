@@ -204,9 +204,9 @@ pipeline {
             }
             steps {
                 container('jnlp') {
-                    script {
-                        nexus_nuget_restore(NUGET_SERVER_URL, NUGET_CREDS_USR, NUGET_CREDS_PSW)
-                    }
+                    // script {
+                    //     nexus_nuget_restore(NUGET_SERVER_URL, NUGET_CREDS_USR, NUGET_CREDS_PSW)
+                    // }
                     script {
                         echo "Building from git branch $BRANCH_NAME"
                         sh '''
