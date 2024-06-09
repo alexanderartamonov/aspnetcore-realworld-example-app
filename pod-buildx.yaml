@@ -6,7 +6,7 @@ spec:
   automountServiceAccountToken: true
   containers:
   - name: jnlp
-    image: 670440716409.dkr.ecr.ap-southeast-1.amazonaws.com/jenkins-buildah-multiarch:ubuntu-latest
+    image: 670440716409.dkr.ecr.ap-southeast-1.amazonaws.com/jenkins-buildah-multiarch:alpine-latest
     imagePullPolicy: Always
     # resources:
     #    limits:
@@ -35,37 +35,3 @@ spec:
   volumes:
     - name: workspace-volume
       emptyDir: {}
-
-# ---
-# apiVersion: v1
-# kind: Pod
-# spec:
-#   containers:
-#     - name: jnlp
-#       image: ghcr.io/felipecrs/jenkins-agent-dind
-#       imagePullPolicy: Always
-#       securityContext:
-#         privileged: true
-#       workingDir: /home/jenkins/agent
-#       volumeMounts:
-#         - mountPath: /home/jenkins/agent
-#           name: workspace-volume
-#       terminationMessagePolicy: FallbackToLogsOnError
-#   hostNetwork: false
-#   automountServiceAccountToken: false
-#   enableServiceLinks: false
-#   dnsPolicy: Default
-#   restartPolicy: Never
-#   terminationGracePeriodSeconds: 30
-#   volumes:
-#     - name: workspace-volume
-#       emptyDir: {}
-#   nodeSelector:
-#     kubernetes.io/os: linux
-#     kubernetes.io/arch: amd64
-#     node.kubernetes.io/prod-jenkins-cluster-ng-minimum-linux-emvacs: ""
-#   tolerations: 
-#     - key: "emvacspod"
-#       operator: "Equal"
-#       value: "true"
-#       effect: "NoExecute"
