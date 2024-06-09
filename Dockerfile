@@ -27,6 +27,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG asmver
 COPY src .
 WORKDIR /src/Conduit
+RUN ls -la .
 RUN dotnet restore
 RUN dotnet build  -c Release -o /app/build 
 
