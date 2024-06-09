@@ -68,7 +68,7 @@ def getVars(project, env) {
 def getVars(project) {
   if (project == 'CARDRANGESERVICE') {
     return [
-            project_dir: "", 
+            project_dir: "./", 
             project_ecr: "3dssv2_card_range_service", 
     ] as java.lang.Object
   }
