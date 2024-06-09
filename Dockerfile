@@ -25,6 +25,7 @@ RUN echo 'install dotnet tracer' && \
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY ["build/build.csproj", "build/"]
+COPY ["nuget.config", "/"]
 RUN dotnet restore "build/build.csproj"
 COPY . .
 WORKDIR "/src/build"
