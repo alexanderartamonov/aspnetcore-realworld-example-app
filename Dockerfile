@@ -37,6 +37,7 @@ RUN dotnet publish "Conduit.csproj" -c Release -o /app/publish /p:UseAppHost=fal
 
 FROM base AS final
 WORKDIR /app
+COPY --from=publish /app/publish .
+RUN ls -la /app/publish
 EXPOSE 5000
-
 ENTRYPOINT ["dotnet", "Conduit.dll"]
