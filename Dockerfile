@@ -28,12 +28,12 @@ ARG asmver
 COPY src .
 WORKDIR /src/Conduit
 RUN ls -la .
-RUN dotnet restore
-RUN dotnet build  -c Release -o /app/build 
+RUN dotnet restore Conduit.csproj
+RUN dotnet build Conduit.csproj -c Release -o /app/build 
 
 FROM build AS publish
 ARG asmver
-RUN dotnet publish -c Release -o /app/publish  -p:UseAppHost=false
+RUN dotnet publish Conduit.csproj -c Release -o /app/publish  -p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
