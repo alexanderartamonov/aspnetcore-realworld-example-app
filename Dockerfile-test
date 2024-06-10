@@ -43,7 +43,7 @@ FROM base AS build
 
 WORKDIR /src
 COPY . .
-RUN dir="$(ls -la ./)" && echo $dir
+RUN echo ls -la ./
 COPY ["build/build.csproj", "build/"]
 RUN dotnet restore "src/Conduit/Conduit.csproj"
 RUN dotnet build "src/Conduit/Conduit.csproj" -c Release -o /app/build
