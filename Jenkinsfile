@@ -238,7 +238,7 @@ pipeline {
                                 -f ${PROJECT_DIR}/Dockerfile-test \
                                 --platform=linux/arm64  \
                                 -t ${ECR_TAGGED_IMG}-arm64 .
-                                docker push ${ECR_TAGGED_IMG}-arm64
+                                #docker push ${ECR_TAGGED_IMG}-arm64
                                 #DOCKER_BUILDKIT=1 docker buildx build --progress=plain \
                                 #    --push \
                                 #    --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
