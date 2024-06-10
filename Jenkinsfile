@@ -233,7 +233,7 @@ pipeline {
                                 # Login into ECR
                                 aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${ECR_URI}
                                 echo Build your multi-architecture container
-                                docker build \
+                                DOCKER_BUILDKIT=1 docker buildx build --progress=plain \
                                 --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
                                 -f ${PROJECT_DIR}/Dockerfile-test \
                                 --platform=linux/arm64  \
