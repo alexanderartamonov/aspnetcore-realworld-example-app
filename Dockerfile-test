@@ -44,11 +44,8 @@ FROM base AS build
 WORKDIR /src
 COPY . .
 RUN echo ls -la ./
-COPY ["build/build.csproj", "build/"]
-# RUN dotnet restore "src/Conduit/Conduit.csproj"
-# RUN dotnet build "src/Conduit/Conduit.csproj" -c Release -o /app/build
 
-RUN dotnet restore "build/Conduit/Conduit.csproj"
+RUN dotnet restore "src/Conduit/Conduit.csproj"
 RUN dotnet build "src/Conduit/Conduit.csproj" -c Release -o /app/build
 FROM build AS publish
 ARG asmver
