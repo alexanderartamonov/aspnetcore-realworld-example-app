@@ -1,7 +1,6 @@
 
 FROM ubuntu:latest as agent
 ARG DEBIAN_FRONTEND=noninteractive
-ARG TRACER_VERSION
 RUN useradd build \
 && apt-get -y update \
 && apt-get -y install \
@@ -20,7 +19,8 @@ RUN mkdir -p /usr/share/dotnet \
     && chmod +x dotnet-install.sh \
     && ./dotnet-install.sh -c 8.0 --install-dir /usr/share/dotnet \
     && dotnet --info
-
+    
+ARG TRACER_VERSION
 RUN echo 'install dotnet tracer' && \
     mkdir -p /opt/datadog \
     && mkdir -p /var/log/datadog \
