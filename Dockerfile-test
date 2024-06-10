@@ -19,7 +19,7 @@ RUN mkdir -p /usr/share/dotnet \
     && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet \
     && wget https://dot.net/v1/dotnet-install.sh \
     && chmod +x dotnet-install.sh \
-    && ./dotnet-install.sh -c 6.0 --install-dir /usr/share/dotnet
+    && ./dotnet-install.sh -c 8.0 --install-dir /usr/share/dotnet
 ARG TRACER_VERSION
 RUN echo 'install dotnet tracer' && \
     mkdir -p /opt/datadog \
@@ -35,27 +35,25 @@ ARG asmver=1.0.0.0
 ENV ASSEMBLY_VERSION=${asmver}
 FROM agent as base
 WORKDIR /app
-EXPOSE 80
-EXPOSE 8080
+EXPOSE 5000
 ENV DEBIAN_FRONTEND noninteractive
 RUN uname -m
 
 FROM base AS build
 
 WORKDIR /src
-COPY ["nuget.config", "."]
-COPY src .
-WORKDIR /src/ThreeDomainServer.CardRanges.Service
-RUN dotnet restore
-RUN dotnet build --arch arm64 -c Release -o /app/build -p:Version=${asmver:-0.0.0.0}
+COPY ["build/build.csproj", "build/"]
+RUN dotnet restore "src/Conduit/Conduit.csproj"
+COPY . .
+WORKDIR "/src/Conduit"
+RUN dotnet build "Conduit.csproj" -c Release -o /app/build
 
 FROM build AS publish
 ARG asmver
-RUN dotnet publish --arch arm64 -c Release -o /app/publish -p:Version=${asmver:-0.0.0.0} -p:UseAppHost=false
+RUN dotnet publish -c Release -o /app/publish -p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "ThreeDomainServer.CardRanges.Service.dll"]
-
-
+EXPOSE 5000
+ENTRYPOINT ["dotnet", "Conduit.dll"]

@@ -211,8 +211,8 @@ pipeline {
                         echo "Building from git branch $BRANCH_NAME"
                         sh '''
                             #export DOCKER_CLI_EXPERIMENTAL=enabled
-                            docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
-                            #docker run --rm --privileged tonistiigi/binfmt:latest
+                            #docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
+                            docker run --rm --privileged tonistiigi/binfmt:latest
                             #docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder
                             #docker buildx inspect --bootstrap
                             docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder
@@ -235,7 +235,7 @@ pipeline {
                                 echo Build your multi-architecture container
                                 docker build \
                                 --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
-                                -f ${PROJECT_DIR}/Dockerfile \
+                                -f ${PROJECT_DIR}/Dockerfile-test \
                                 --platform=linux/arm64  \
                                 -t ${ECR_TAGGED_IMG}-arm64 .
                                 docker push ${ECR_TAGGED_IMG}-arm64
