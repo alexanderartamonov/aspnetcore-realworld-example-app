@@ -1,5 +1,5 @@
 
-FROM docker.io/arm64v8/ubuntu:latest as agent
+FROM ubuntu:latest as agent
 ARG DEBIAN_FRONTEND=noninteractive
 RUN useradd build \
 && apt-get -y update \
