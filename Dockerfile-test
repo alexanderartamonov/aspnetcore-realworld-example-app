@@ -1,6 +1,7 @@
 
 FROM ubuntu:latest as agent
 ARG DEBIAN_FRONTEND=noninteractive
+ARG TRACER_VERSION
 RUN useradd build \
 && apt-get -y update \
 && apt-get -y install \
@@ -13,14 +14,13 @@ tzdata \
 libicu-dev \
 && rm -rf  /var/log/apt* /var/log/apt.*;
 
-
-#To install the .NET SDK, run the following commands
 RUN mkdir -p /usr/share/dotnet \
     && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet \
     && wget https://dot.net/v1/dotnet-install.sh \
     && chmod +x dotnet-install.sh \
-    && ./dotnet-install.sh -c 8.0 --install-dir /usr/share/dotnet
-ARG TRACER_VERSION
+    && ./dotnet-install.sh -c 8.0 --install-dir /usr/share/dotnet \
+    && dotnet --info
+
 RUN echo 'install dotnet tracer' && \
     mkdir -p /opt/datadog \
     && mkdir -p /var/log/datadog \
@@ -42,11 +42,11 @@ RUN uname -m
 FROM base AS build
 
 WORKDIR /src
+COPY . .
+RUN dir="$(ls -la ./)" && echo $dir
 COPY ["build/build.csproj", "build/"]
 RUN dotnet restore "src/Conduit/Conduit.csproj"
-COPY . .
-WORKDIR "/src/Conduit"
-RUN dotnet build "Conduit.csproj" -c Release -o /app/build
+RUN dotnet build "/src/ConduitConduit.csproj" -c Release -o /app/build
 
 FROM build AS publish
 ARG asmver
@@ -55,5 +55,4 @@ RUN dotnet publish -c Release -o /app/publish -p:UseAppHost=false
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-EXPOSE 5000
 ENTRYPOINT ["dotnet", "Conduit.dll"]
