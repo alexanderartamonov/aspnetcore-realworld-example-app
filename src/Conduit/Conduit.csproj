@@ -15,5 +15,6 @@
     <PackageReference Include="FluentValidation.AspNetCore" />
     <PackageReference Include="MediatR" />
     <PackageReference Include="Swashbuckle.AspNetCore" />
+    <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks" />
   </ItemGroup>
 </Project>

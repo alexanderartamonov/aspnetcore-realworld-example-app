@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 // read database configuration (database provider + database connection) from environment variables
 //Environment.GetEnvironmentVariable(DEFAULT_DATABASE_PROVIDER)
@@ -87,6 +88,8 @@ builder.Services.AddSwaggerGen(x =>
 });
 
 builder.Services.AddCors();
+builder.Services.AddHealthChecks();
+
 builder
     .Services.AddMvc(opt =>
     {
@@ -131,4 +134,17 @@ using (var scope = app.Services.CreateScope())
         .Database.EnsureCreated();
     // use context
 }
+
+// public void ConfigureServices(IServiceCollection services)
+// {
+//     services.AddHealthChecks()
+//             .AddCheck("sample_health_check", () => HealthCheckResult.Healthy("Hello from .Net8 API!"));
+// }
+
+// public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+// {
+//     app.UseHealthChecks("/health");
+// }
+
+app.MapHealthChecks("/hc");
 app.Run();
