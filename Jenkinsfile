@@ -212,6 +212,7 @@ pipeline {
                         sh '''
                             #docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder
                             #docker buildx inspect --bootstrap
+                            docker buildx create --name container --driver=docker-container
                         '''
                         sh '''
                             set +x
@@ -231,7 +232,8 @@ pipeline {
                                 #DOCKER_BUILDKIT=1 docker buildx build --progress=plain \
                                 #--build-arg TRACER_VERSION=$DD_AGENT_VERSION \
                                 #-f ${PROJECT_DIR}/Dockerfile-test \
-                                #--platform=linux/arm64  \
+                                #--platform linux/arm64/v8\
+                                #--builder container \
                                 #-t ${ECR_TAGGED_IMG}-arm64 \
                                 #--load \
                                 #.
@@ -240,7 +242,7 @@ pipeline {
                                 buildah manifest create ${ECR_TAGGED_IMG}-arm64
                                 buildah build \
                                 --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
-                                --platform=linux/arm64 \
+                                --platform linux/arm64 \
                                 --tag ${ECR_TAGGED_IMG}-arm64 \
                                 --manifest ${ECR_TAGGED_IMG}-arm64 \
                                 ${PROJECT_DIR}/Dockerfile-test
