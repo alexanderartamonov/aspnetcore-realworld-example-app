@@ -244,10 +244,10 @@ pipeline {
                                 buildah manifest create multiarch-test
                                 buildah bud \
                                 --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
-                                -f ${PROJECT_DIR}/Dockerfile-test \
+                                --file ${PROJECT_DIR}/Dockerfile-test \
                                 --manifest ${MANIFEST_NAME} \
                                 --arch arm64 \
-                                --t ${ECR_TAGGED_IMG}-arm64 \
+                                --tag ${ECR_TAGGED_IMG}-arm64 \
                                 .
                                 buildah manifest push --all \
                                 ${MANIFEST_NAME} \
