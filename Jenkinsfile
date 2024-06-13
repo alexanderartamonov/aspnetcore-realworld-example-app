@@ -77,8 +77,8 @@ def getVars(project) {
 pipeline {
     agent {
       kubernetes {
-        defaultContainer 'buildah'
-        yamlFile 'pod.yaml'
+        defaultContainer 'jnlp'
+        yamlFile 'pod-buildx.yaml'
       }
     }
 
@@ -203,22 +203,15 @@ pipeline {
                 }
             }
             steps {
-                container('buildah') {
+                container('jnlp') {
                     // script {
                     //     nexus_nuget_restore(NUGET_SERVER_URL, NUGET_CREDS_USR, NUGET_CREDS_PSW)
                     // }
                     script {
                         echo "Building from git branch $BRANCH_NAME"
                         sh '''
-                            #export DOCKER_CLI_EXPERIMENTAL=enabled
-                            docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
-                            #docker run --rm --privileged tonistiigi/binfmt:latest
-                            #docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder
-                            #docker buildx inspect --bootstrap
-                            #docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder
-                            #docker buildx inspect --bootstrap
-                            apt-get update -y
-                            apt-get install -y qemu-user-static
+                            docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder
+                            docker buildx inspect --bootstrap
                         '''
                         sh '''
                             set +x
@@ -233,23 +226,13 @@ pipeline {
                                 --role-session-name assumed | jq -r '.Credentials | "export \
                                 AWS_ACCESS_KEY_ID=\\(.AccessKeyId)\\nexport AWS_SECRET_ACCESS_KEY=\\(.SecretAccessKey)\\nexport AWS_SESSION_TOKEN=\\(.SessionToken)\\n"')
                                 # Login into ECR
-                                aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | buildah login --username AWS --password-stdin ${ECR_URI}
-                                echo Build your multi-architecture container
-                                #DOCKER_BUILDKIT=1 docker buildx build --progress=plain \
-                                #--build-arg TRACER_VERSION=$DD_AGENT_VERSION \
-                                #-f ${PROJECT_DIR}/Dockerfile-test \
-                                #--platform=linux/arm64  \
-                                #-t ${ECR_TAGGED_IMG}-arm64 \
-                                #--load \
-                                #.
-                                #docker push ${ECR_TAGGED_IMG}-arm64
-                                buildah manifest create ${ECR_TAGGED_IMG}-arm64
-                                buildah build \
-                                --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
-                                --platform=linux/arm64 \
-                                --tag ${ECR_TAGGED_IMG}-arm64 \
-                                --manifest ${ECR_TAGGED_IMG}-arm64 \
-                                ${PROJECT_DIR}/Dockerfile
+                                aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${ECR_URI}
+                                docker buildx build \
+                                    --push \
+                                    --file ${PROJECT_DIR}/Dockerfile \
+                                    --platform=linux/arm64 \
+                                    --tag "${ECR_TAGGED_IMG}-multiarch" \
+                                    .
                             #fi
                     '''
                     }
