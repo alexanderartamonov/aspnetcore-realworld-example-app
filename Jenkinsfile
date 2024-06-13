@@ -249,7 +249,7 @@ pipeline {
                                 --platform=linux/arm64 \
                                 --tag ${ECR_TAGGED_IMG}-arm64 \
                                 --manifest ${ECR_TAGGED_IMG}-arm64 \
-                                ${PROJECT_DIR}/Dockerfile-test
+                                ${PROJECT_DIR}/Dockerfile
                             #fi
                     '''
                     }
