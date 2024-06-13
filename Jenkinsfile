@@ -214,7 +214,7 @@ pipeline {
                             #docker buildx inspect --bootstrap
                             #docker buildx create --name container --driver=docker-container
                             #docker buildx create --use
-                            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+                            #docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
                             docker buildx create -use --platform=linux/arm64,linux/amd64 --name multi-platform-builder --driver=docker-container
                         '''
                         sh '''
@@ -235,7 +235,7 @@ pipeline {
                                 DOCKER_BUILDKIT=1 docker buildx build --progress=plain --no-cache \
                                 --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
                                 -f ${PROJECT_DIR}/Dockerfile-test \
-                                --platform linux/arm64/v8\
+                                --platform linux/arm64 \
                                 --builder multi-platform-builder \
                                 -t ${ECR_TAGGED_IMG}-arm64 \
                                 --load \
