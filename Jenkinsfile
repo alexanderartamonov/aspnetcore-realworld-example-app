@@ -214,8 +214,8 @@ pipeline {
                             #docker buildx inspect --bootstrap
                             #docker buildx create --name container --driver=docker-container
                             #docker buildx create --use
-                            #docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
-                            #docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder --driver=docker-container
+                            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+                            docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder --driver=docker-container
                         '''
                         sh '''
                             set +x
