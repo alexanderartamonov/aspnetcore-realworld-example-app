@@ -227,13 +227,14 @@ pipeline {
                                 AWS_ACCESS_KEY_ID=\\(.AccessKeyId)\\nexport AWS_SECRET_ACCESS_KEY=\\(.SecretAccessKey)\\nexport AWS_SESSION_TOKEN=\\(.SessionToken)\\n"')
                                 # Login into ECR
                                 aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${ECR_URI}
-                                docker buildx build \
-                                    --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
-                                    --push \
-                                    --file ${PROJECT_DIR}/Dockerfile-test \
-                                    --platform=linux/arm64 \
-                                    --tag "${ECR_TAGGED_IMG}-multiarch" \
-                                    .
+                                DOCKER_BUILDKIT=1 docker buildx build --progress=plain \
+                                --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
+                                -f ${PROJECT_DIR}/Dockerfile-test \
+                                --platform=linux/arm64  \
+                                -t ${ECR_TAGGED_IMG}-arm64 \
+                                --load \
+                                .
+                                docker push ${ECR_TAGGED_IMG}-arm64
                             #fi
                     '''
                     }
