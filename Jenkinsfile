@@ -217,6 +217,7 @@ pipeline {
                             #docker buildx inspect --bootstrap
                             #docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder
                             #docker buildx inspect --bootstrap
+                            apt install -y  qemu-user-static
                         '''
                         sh '''
                             set +x
@@ -241,16 +242,8 @@ pipeline {
                                 #--load \
                                 #.
                                 #docker push ${ECR_TAGGED_IMG}-arm64
-                                buildah manifest create multiarch-test
-                                buildah bud \
-                                --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
-                                --file ${PROJECT_DIR}/Dockerfile-test \
-                                --tag ${ECR_TAGGED_IMG}-arm64 \
-                                --manifest ${MANIFEST_NAME} \
-                                --arch arm64 
-                                buildah manifest push --all \
-                                ${MANIFEST_NAME} \
-                                ${ECR_TAGGED_IMG}-arm64
+                                buildah manifest create ${ECR_TAGGED_IMG}-arm64
+                                buildah build --platform linux/arm64 --manifest  ${ECR_TAGGED_IMG}-arm64 ${PROJECT_DIR}/Dockerfile-test
                             #fi
                     '''
                     }
