@@ -211,12 +211,12 @@ pipeline {
                         echo "Building from git branch $BRANCH_NAME"
                         sh '''
                             #export DOCKER_CLI_EXPERIMENTAL=enabled
-                            docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
+                            #docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
                             #docker run --rm --privileged tonistiigi/binfmt:latest
                             #docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder
                             #docker buildx inspect --bootstrap
-                            docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder
-                            docker buildx inspect --bootstrap
+                            #docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder
+                            #docker buildx inspect --bootstrap
                         '''
                         sh '''
                             set +x
