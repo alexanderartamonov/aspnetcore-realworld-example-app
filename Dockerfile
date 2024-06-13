@@ -3,6 +3,9 @@
 FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
 WORKDIR /app
 ARG TRACER_VERSION
+RUN apt-get -y update \
+&& apt-get install -y curl
+
 RUN echo 'install dotnet tracer' && \
     mkdir -p /opt/datadog \
     && mkdir -p /var/log/datadog \
