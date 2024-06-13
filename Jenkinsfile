@@ -258,13 +258,13 @@ pipeline {
                                 
                                 #docker push ${ECR_TAGGED_IMG}-arm64
                                 
-                                buildah manifest create ${ECR_TAGGED_IMG}-arm64
+                                buildah manifest create ${ECR_TAGGED_IMG}
                                 buildah build \
                                 --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
                                 --arch arm64 \
                                 --platform linux/arm64 \
                                 --tag ${ECR_TAGGED_IMG}-arm64 \
-                                --manifest ${ECR_TAGGED_IMG}-arm64 \
+                                --manifest ${ECR_TAGGED_IMG} \
                                 ${PROJECT_DIR}/Dockerfile-test
                             
                             #fi
