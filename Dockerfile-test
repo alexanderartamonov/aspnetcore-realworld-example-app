@@ -1,5 +1,5 @@
 
-FROM 089465505731.dkr.ecr.ap-southeast-1.amazonaws.com/dotnet8:sdk as agent
+FROM --platform=arm64 089465505731.dkr.ecr.ap-southeast-1.amazonaws.com/dotnet8:sdk as agent
 ARG DEBIAN_FRONTEND=noninteractive
 ARG TRACER_VERSION
 ARG TARGETARCH
