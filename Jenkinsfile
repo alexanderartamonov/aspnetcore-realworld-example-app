@@ -212,7 +212,7 @@ pipeline {
                         sh '''
                             #docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder
                             #docker buildx inspect --bootstrap
-                            docker buildx create --name container --driver=docker-container
+                            #docker buildx create --name container --driver=docker-container
                         '''
                         sh '''
                             set +x
