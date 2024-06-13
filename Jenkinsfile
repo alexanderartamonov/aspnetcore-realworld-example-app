@@ -210,8 +210,8 @@ pipeline {
                     script {
                         echo "Building from git branch $BRANCH_NAME"
                         sh '''
-                            docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder
-                            docker buildx inspect --bootstrap
+                            #docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder
+                            #docker buildx inspect --bootstrap
                         '''
                         sh '''
                             set +x
