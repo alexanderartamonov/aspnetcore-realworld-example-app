@@ -217,7 +217,8 @@ pipeline {
                             #docker buildx inspect --bootstrap
                             #docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder
                             #docker buildx inspect --bootstrap
-                            apt install -y  qemu-user-static
+                            apt-get update -y
+                            apt-get install -y  qemu-user-static
                         '''
                         sh '''
                             set +x
