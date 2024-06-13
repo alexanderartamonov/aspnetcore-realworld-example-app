@@ -6,7 +6,7 @@ spec:
   automountServiceAccountToken: true
   containers:
   - name: jnlp
-    image: 670440716409.dkr.ecr.ap-southeast-1.amazonaws.com/jenkins-buildah-multiarch:alpine-latest
+    image: 670440716409.dkr.ecr.ap-southeast-1.amazonaws.com/jenkins-buildah-multiarch:ubuntu-noble-20240530
     imagePullPolicy: Always
     resources:
        limits:
