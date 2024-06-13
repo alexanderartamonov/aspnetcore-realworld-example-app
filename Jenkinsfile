@@ -233,13 +233,12 @@ pipeline {
                                 aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${ECR_URI}
                 
                                 DOCKER_BUILDKIT=1 docker buildx build --progress=plain --no-cache \
+                                --push \
                                 --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
                                 -f ${PROJECT_DIR}/Dockerfile-test \
                                 --platform linux/arm64 \
                                 --builder multi-platform-builder \
                                 -t ${ECR_TAGGED_IMG}-arm64 \
-                                --load \
-                                --push \
                                 .
                                 #docker push ${ECR_TAGGED_IMG}-arm64
                                 
