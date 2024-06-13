@@ -20,12 +20,12 @@ RUN echo 'install dotnet tracer' && \
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 COPY . .
-WORKDIR /src/src
-RUN dotnet restore "Conduit/Conduit.csproj"
-RUN dotnet build "Conduit/Conduit.csproj" -c Release -o /app/build
+WORKDIR /src
+RUN dotnet restore "src/Conduit/Conduit.csproj"
+RUN dotnet build "src/Conduit/Conduit.csproj" -c Release -o /app/build
 FROM build AS publish
 ARG asmver
-RUN dotnet publish "Conduit/Conduit.csproj" -c Release -o /app/publish -p:UseAppHost=false
+RUN dotnet publish "src/Conduit/Conduit.csproj" -c Release -o /app/publish -p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
