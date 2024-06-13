@@ -228,6 +228,7 @@ pipeline {
                                 # Login into ECR
                                 aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${ECR_URI}
                                 docker buildx build \
+                                    --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
                                     --push \
                                     --file ${PROJECT_DIR}/Dockerfile \
                                     --platform=linux/arm64 \
