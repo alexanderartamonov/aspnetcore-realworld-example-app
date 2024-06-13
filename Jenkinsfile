@@ -211,14 +211,14 @@ pipeline {
                         echo "Building from git branch $BRANCH_NAME"
                         sh '''
                             #export DOCKER_CLI_EXPERIMENTAL=enabled
-                            #docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
+                            docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
                             #docker run --rm --privileged tonistiigi/binfmt:latest
                             #docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder
                             #docker buildx inspect --bootstrap
                             #docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder
                             #docker buildx inspect --bootstrap
                             apt-get update -y
-                            apt-get install -y qemu-system
+                            apt-get install -y qemu-user-static
                         '''
                         sh '''
                             set +x
@@ -243,7 +243,7 @@ pipeline {
                                 #--load \
                                 #.
                                 #docker push ${ECR_TAGGED_IMG}-arm64
-                                #buildah manifest create ${ECR_TAGGED_IMG}-arm64
+                                buildah manifest create ${ECR_TAGGED_IMG}-arm64
                                 buildah build \
                                 --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
                                 --platform=linux/arm64 \
