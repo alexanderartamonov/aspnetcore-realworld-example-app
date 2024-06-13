@@ -259,13 +259,13 @@ pipeline {
                                 #docker push ${ECR_TAGGED_IMG}-arm64
                                 
                                 podman manifest create ${ECR_TAGGED_IMG}-arm64
-                                podman build \
-                                --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
-                                --arch arm64 \
-                                --platform linux/arm64 \
-                                --tag ${ECR_TAGGED_IMG}-arm64 \
-                                --manifest ${ECR_TAGGED_IMG}-arm64 \
-                                ${PROJECT_DIR}/Dockerfile-test
+                                podman build --build-arg TRACER_VERSION=$DD_AGENT_VERSION --arch arm --manifest ${ECR_TAGGED_IMG}-arm64 ${PROJECT_DIR}/Dockerfile-test
+                                #podman build \
+                                #--build-arg TRACER_VERSION=$DD_AGENT_VERSION \
+                                #--arch arm \
+                                #--tag ${ECR_TAGGED_IMG}-arm64 \
+                                #--manifest ${ECR_TAGGED_IMG}-arm64 \
+                                #${PROJECT_DIR}/Dockerfile-test
                             
                             #fi
                     '''
