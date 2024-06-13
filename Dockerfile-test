@@ -19,9 +19,8 @@ wget \
 #     && chmod +x dotnet-install.sh \
 #     && ./dotnet-install.sh -c 8.0 --install-dir /usr/share/dotnet \
 #     && dotnet --info
-RUN add-apt-repository ppa:dotnet/backports \
-&& apt-get update \
-& apt-get install -y dotnet-sdk-8.0
+RUN && apt-get update \
+&& apt-get install -y dotnet-sdk-8.0
 
 ARG TRACER_VERSION
 RUN echo 'install dotnet tracer' && \
