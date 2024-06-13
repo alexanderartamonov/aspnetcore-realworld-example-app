@@ -1,6 +1,6 @@
 #See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
-FROM 089465505731.dkr.ecr.ap-southeast-1.amazonaws.com/dotnet8:aspnetcore AS base
+FROM --platform=arm64 089465505731.dkr.ecr.ap-southeast-1.amazonaws.com/dotnet8:aspnetcore AS base
 WORKDIR /app
 EXPOSE 5000
 ENV DEBIAN_FRONTEND noninteractive
@@ -16,7 +16,7 @@ RUN echo 'install dotnet tracer' && \
     && /opt/datadog/createLogPath.sh \
     && rm ./datadog-dotnet-apm_${TRACER_VERSION}_arm64.deb
 
-FROM 089465505731.dkr.ecr.ap-southeast-1.amazonaws.com/dotnet8:sdk AS build
+FROM --platform=arm64 089465505731.dkr.ecr.ap-southeast-1.amazonaws.com/dotnet8:sdk AS build
 WORKDIR /src
 COPY . .
 WORKDIR /src
