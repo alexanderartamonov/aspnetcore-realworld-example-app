@@ -212,7 +212,10 @@ pipeline {
                         sh '''
                             #docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder
                             #docker buildx inspect --bootstrap
-                            docker buildx create --name container --driver=docker-container
+                            #docker buildx create --name container --driver=docker-container
+                            #docker buildx create --use
+                            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+                            docker buildx create -use --platform=linux/arm64,linux/amd64 --name multi-platform-builder --driver=docker-container
                         '''
                         sh '''
                             set +x
@@ -228,16 +231,17 @@ pipeline {
                                 AWS_ACCESS_KEY_ID=\\(.AccessKeyId)\\nexport AWS_SECRET_ACCESS_KEY=\\(.SecretAccessKey)\\nexport AWS_SESSION_TOKEN=\\(.SessionToken)\\n"')
                                 # Login into ECR
                                 aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${ECR_URI}
-                                
-                                DOCKER_BUILDKIT=1 docker buildx build --progress=plain \
+                
+                                DOCKER_BUILDKIT=1 docker buildx build --progress=plain --no-cache \
                                 --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
                                 -f ${PROJECT_DIR}/Dockerfile-test \
                                 --platform linux/arm64/v8\
-                                --builder container \
+                                --builder multi-platform-builder \
                                 -t ${ECR_TAGGED_IMG}-arm64 \
                                 --load \
+                                --push \
                                 .
-                                docker push ${ECR_TAGGED_IMG}-arm64
+                                #docker push ${ECR_TAGGED_IMG}-arm64
                                 
                                 #buildah manifest create ${ECR_TAGGED_IMG}-arm64
                                 #buildah build \
