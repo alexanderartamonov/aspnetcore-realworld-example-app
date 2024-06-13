@@ -13,8 +13,8 @@ spec:
           memory: "4096Mi"
           cpu: "2000m"
        requests:
-          memory: "4096Mi"
-          cpu: "2000m"
+          memory: "2048Mi"
+          cpu: "1000m"
     securityContext:
       privileged: true
     env :
@@ -35,3 +35,12 @@ spec:
   volumes:
     - name: workspace-volume
       emptyDir: {}
+  nodeSelector:
+    kubernetes.io/os: linux
+    kubernetes.io/arch: amd64
+    node.kubernetes.io/prod-jenkins-cluster-ng-minimum-linux-emvacs: ""
+  tolerations: 
+    - key: "emvacspod"
+      operator: "Equal"
+      value: "true"
+      effect: "NoExecute"
