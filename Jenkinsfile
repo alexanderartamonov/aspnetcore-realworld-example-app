@@ -247,8 +247,7 @@ pipeline {
                                 --tag ${ECR_TAGGED_IMG}-arm64 \
                                 --manifest ${MANIFEST_NAME} \
                                 --arch arm64 \
-                                --file ${PROJECT_DIR}/Dockerfile-test \
-                                .
+                                ${PROJECT_DIR}/Dockerfile-test
                                 buildah manifest push --all \
                                 ${MANIFEST_NAME} \
                                 ${ECR_TAGGED_IMG}-arm64
