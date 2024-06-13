@@ -1,27 +1,6 @@
 
-FROM ubuntu:latest as agent
+FROM 089465505731.dkr.ecr.ap-southeast-1.amazonaws.com/dotnet8:sdk as agent
 ARG DEBIAN_FRONTEND=noninteractive
-RUN useradd build \
-&& apt-get -y update \
-&& apt-get -y install \
-curl \
-wget \
-# apt-transport-https \
-# libvshadow-utils \
-# libssl-dev \
-# tzdata \
-# libicu-dev \
-&& rm -rf  /var/log/apt* /var/log/apt.*;
-
-# RUN mkdir -p /usr/share/dotnet \
-#     && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet \
-#     && wget https://dot.net/v1/dotnet-install.sh \
-#     && chmod +x dotnet-install.sh \
-#     && ./dotnet-install.sh -c 8.0 --install-dir /usr/share/dotnet \
-#     && dotnet --info
-RUN apt-get update -y \
-&& apt-get install -y dotnet-sdk-8.0
-
 ARG TRACER_VERSION
 RUN echo 'install dotnet tracer' && \
     mkdir -p /opt/datadog \
