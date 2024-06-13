@@ -226,7 +226,7 @@ pipeline {
                                 --role-session-name assumed | jq -r '.Credentials | "export \
                                 AWS_ACCESS_KEY_ID=\\(.AccessKeyId)\\nexport AWS_SECRET_ACCESS_KEY=\\(.SecretAccessKey)\\nexport AWS_SESSION_TOKEN=\\(.SessionToken)\\n"')
                                 # Login into ECR
-                                aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${ECR_URI}
+                                aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | buildah login --username AWS --password-stdin ${ECR_URI}
                                 
                                 #DOCKER_BUILDKIT=1 docker buildx build --progress=plain \
                                 #--build-arg TRACER_VERSION=$DD_AGENT_VERSION \
