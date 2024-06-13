@@ -6,20 +6,23 @@ RUN useradd build \
 && apt-get -y install \
 curl \
 wget \
-apt-transport-https \
-libvshadow-utils \
-libssl-dev \
-tzdata \
-libicu-dev \
+# apt-transport-https \
+# libvshadow-utils \
+# libssl-dev \
+# tzdata \
+# libicu-dev \
 && rm -rf  /var/log/apt* /var/log/apt.*;
 
-RUN mkdir -p /usr/share/dotnet \
-    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet \
-    && wget https://dot.net/v1/dotnet-install.sh \
-    && chmod +x dotnet-install.sh \
-    && ./dotnet-install.sh -c 8.0 --install-dir /usr/share/dotnet \
-    && dotnet --info
-    
+# RUN mkdir -p /usr/share/dotnet \
+#     && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet \
+#     && wget https://dot.net/v1/dotnet-install.sh \
+#     && chmod +x dotnet-install.sh \
+#     && ./dotnet-install.sh -c 8.0 --install-dir /usr/share/dotnet \
+#     && dotnet --info
+RUN add-apt-repository ppa:dotnet/backports \
+&& apt-get update \
+& apt-get install -y dotnet-sdk-8.0
+
 ARG TRACER_VERSION
 RUN echo 'install dotnet tracer' && \
     mkdir -p /opt/datadog \
