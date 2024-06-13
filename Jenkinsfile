@@ -77,8 +77,8 @@ def getVars(project) {
 pipeline {
     agent {
       kubernetes {
-        defaultContainer 'jnlp'
-        yamlFile 'pod-buildx.yaml'
+        defaultContainer 'buildah'
+        yamlFile 'pod.yaml'
       }
     }
 
@@ -203,7 +203,7 @@ pipeline {
                 }
             }
             steps {
-                container('jnlp') {
+                container('buildah') {
                     // script {
                     //     nexus_nuget_restore(NUGET_SERVER_URL, NUGET_CREDS_USR, NUGET_CREDS_PSW)
                     // }
@@ -233,21 +233,21 @@ pipeline {
                                 # Login into ECR
                                 aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${ECR_URI}
                                 echo Build your multi-architecture container
-                                DOCKER_BUILDKIT=1 docker buildx build --progress=plain \
+                                #DOCKER_BUILDKIT=1 docker buildx build --progress=plain \
+                                #--build-arg TRACER_VERSION=$DD_AGENT_VERSION \
+                                #-f ${PROJECT_DIR}/Dockerfile-test \
+                                #--platform=linux/arm64  \
+                                #-t ${ECR_TAGGED_IMG}-arm64 \
+                                #--load \
+                                #.
+                                #docker push ${ECR_TAGGED_IMG}-arm64
+                                buildah build \
                                 --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
                                 -f ${PROJECT_DIR}/Dockerfile-test \
-                                --platform=linux/arm64  \
+                                --platform linux/arm64/v8  \
                                 -t ${ECR_TAGGED_IMG}-arm64 \
                                 --load \
                                 .
-                                docker push ${ECR_TAGGED_IMG}-arm64
-                                #DOCKER_BUILDKIT=1 docker buildx build --progress=plain \
-                                #    --push \
-                                #    --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
-                                #    --file ${PROJECT_DIR}/Dockerfile-amd \
-                                #    --platform=linux/amd64  \
-                                #    --tag "${ECR_TAGGED_IMG}-amd64" \
-                                #    .
                             #fi
                     '''
                     }
