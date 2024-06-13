@@ -230,7 +230,7 @@ pipeline {
                                 docker buildx build \
                                     --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
                                     --push \
-                                    --file ${PROJECT_DIR}/Dockerfile \
+                                    --file ${PROJECT_DIR}/Dockerfile-test \
                                     --platform=linux/arm64 \
                                     --tag "${ECR_TAGGED_IMG}-multiarch" \
                                     .
