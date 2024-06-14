@@ -210,11 +210,8 @@ pipeline {
                     script {
                         echo "Building from git branch $BRANCH_NAME"
                         sh '''
-                            #docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder
-                            #docker buildx inspect --bootstrap
-                            #docker buildx create --name container --driver=docker-container
-                            #docker buildx create --use
-                            docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+                            #docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+                            docker run --rm --privileged docker/binfmt:a7996909642ee92942dcd6cff44b9b95f08dad64
                             docker buildx create --use --platform=linux/arm64,linux/amd64 --name multi-platform-builder --driver=docker-container
                         '''
                         sh '''
