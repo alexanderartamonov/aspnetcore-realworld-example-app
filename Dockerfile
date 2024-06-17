@@ -18,7 +18,6 @@ RUN echo ${TARGETPLATFORM} \
 # && /opt/datadog/createLogPath.sh \
 # && rm ./datadog-dotnet-apm_${TRACER_VERSION}_${TARGETARCH}.deb
 
-
 FROM 089465505731.dkr.ecr.ap-southeast-1.amazonaws.com/dotnet8:sdk AS build
 WORKDIR /src
 COPY . .
