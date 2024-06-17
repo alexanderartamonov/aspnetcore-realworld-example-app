@@ -1,3 +1,4 @@
+#!/bin/bash
 TRACER_VERSION=$1
 echo "install dotnet tracer ${TARGETARCH}"
 mkdir -p /opt/datadog 
