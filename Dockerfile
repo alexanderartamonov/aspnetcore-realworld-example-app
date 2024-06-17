@@ -6,7 +6,7 @@ EXPOSE 5000
 ENV DEBIAN_FRONTEND noninteractive
 RUN uname -m
 ARG TRACER_VERSION TARGETARCH TARGETPLATFORM
-COPY datadog_install.sh /app/datadog_install.sh
+COPY tracer_install.sh /app/tracer_install.sh
 RUN echo ${TARGETARCH} \
 && chmod +x /app/datadog_install.sh \
 && /app/tracer_install.sh ${TRACER_VERSION} ${TARGETARCH}
