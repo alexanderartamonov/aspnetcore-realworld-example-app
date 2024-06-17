@@ -6,17 +6,17 @@ EXPOSE 5000
 ENV DEBIAN_FRONTEND noninteractive
 RUN uname -m
 ARG TRACER_VERSION TARGETARCH TARGETPLATFORM
-COPY /linux /app/linux
-RUN echo ${TARGETPLATFORM} \
-&& chmod +x /app/${TARGETPLATFORM}.sh \
-&& /app/${TARGETPLATFORM}.sh ${TRACER_VERSION} ${TARGETARCH}
-# RUN echo install dotnet tracer ${TRACER_VERSION} for ${TARGETARCH} \
-# && mkdir -p /opt/datadog \
-# && mkdir -p /var/log/datadog \
-# && curl -LO https://github.com/DataDog/dd-trace-dotnet/releases/download/v${TRACER_VERSION}/datadog-dotnet-apm_${TRACER_VERSION}_${TARGETARCH}.deb \
-# && dpkg -i ./datadog-dotnet-apm_${TRACER_VERSION}_${TARGETARCH}.deb \
-# && /opt/datadog/createLogPath.sh \
-# && rm ./datadog-dotnet-apm_${TRACER_VERSION}_${TARGETARCH}.deb
+# COPY /linux /app/linux
+# RUN echo ${TARGETPLATFORM} \
+# && chmod +x /app/${TARGETPLATFORM}.sh \
+# && /app/${TARGETPLATFORM}.sh ${TRACER_VERSION} ${TARGETARCH}
+RUN echo install dotnet tracer ${TRACER_VERSION} for ${TARGETARCH} \
+&& mkdir -p /opt/datadog \
+&& mkdir -p /var/log/datadog \
+&& curl -LO https://github.com/DataDog/dd-trace-dotnet/releases/download/v${TRACER_VERSION}/datadog-dotnet-apm_${TRACER_VERSION}_${TARGETARCH}.deb \
+&& dpkg -i ./datadog-dotnet-apm_${TRACER_VERSION}_${TARGETARCH}.deb \
+&& /opt/datadog/createLogPath.sh \
+&& rm ./datadog-dotnet-apm_${TRACER_VERSION}_${TARGETARCH}.deb
 
 FROM 089465505731.dkr.ecr.ap-southeast-1.amazonaws.com/dotnet8:sdk AS build
 WORKDIR /src
