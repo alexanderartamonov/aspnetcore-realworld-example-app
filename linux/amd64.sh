@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
 set -eu
 TRACER_VERSION=$1
 TARGETARCH=$2
