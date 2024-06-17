@@ -232,7 +232,7 @@ pipeline {
                                 DOCKER_BUILDKIT=1 docker buildx build --progress=plain --no-cache \
                                 --push \
                                 --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
-                                -f ${PROJECT_DIR}/Dockerfile-test \
+                                -f ${PROJECT_DIR}/Dockerfile \
                                 --platform linux/arm64 \
                                 --platform linux/amd64 \
                                 --builder multi-platform-builder \
