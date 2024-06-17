@@ -5,11 +5,11 @@ WORKDIR /app
 EXPOSE 5000
 ARG DEBIAN_FRONTEND=noninteractive
 ARG TRACER_VERSION TARGETARCH TARGETPLATFORM
-COPY /tracer_install_${TARGETARCH}.sh /app/tracer_install_${TARGETARCH}.sh
+COPY /tracer_install.sh /app/tracer_install.sh
 # COPY /linux /app/linux
 RUN echo ${TARGETPLATFORM} \
-&& chmod +x /app/tracer_install_${TARGETARCH}.sh \
-&& /app/tracer_install_${TARGETARCH}.sh ${TRACER_VERSION} ${TARGETARCH}
+&& chmod +x /app/tracer_install.sh \
+&& /app/tracer_install.sh ${TRACER_VERSION} ${TARGETARCH}
 # RUN echo "install dotnet tracer ${TRACER_VERSION} for ${TARGETARCH}" \
 # && mkdir -p /opt/datadog \
 # && mkdir -p /var/log/datadog \
