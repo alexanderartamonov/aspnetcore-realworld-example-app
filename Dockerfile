@@ -9,7 +9,7 @@ ARG TRACER_VERSION TARGETARCH TARGETPLATFORM
 COPY linux/ /app/linux
 # COPY tracer_install.sh /app/tracer_install.sh
 RUN chmod +x /app/$TARGETPLATFORM.sh \
-&& /app/$TARGETPLATFORM.sh
+&& /app/$TARGETPLATFORM.sh $TRACER_VERSION $TARGETARCH
 
 FROM --platform=arm64 089465505731.dkr.ecr.ap-southeast-1.amazonaws.com/dotnet8:sdk AS build
 WORKDIR /src
