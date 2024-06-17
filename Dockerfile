@@ -3,8 +3,7 @@
 FROM 089465505731.dkr.ecr.ap-southeast-1.amazonaws.com/dotnet8:aspnetcore AS base
 WORKDIR /app
 EXPOSE 5000
-ENV DEBIAN_FRONTEND noninteractive
-RUN uname -m
+ARG DEBIAN_FRONTEND=noninteractive
 ARG TRACER_VERSION TARGETARCH TARGETPLATFORM
 COPY /tracer_install.sh /app/tracer_install.sh
 # COPY /linux /app/linux
