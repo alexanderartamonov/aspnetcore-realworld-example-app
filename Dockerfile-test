@@ -1,7 +1,7 @@
 
 FROM 089465505731.dkr.ecr.ap-southeast-1.amazonaws.com/dotnet8:sdk as agent
 ARG DEBIAN_FRONTEND=noninteractive
-ARG TRACER_VERSION TARGETARCH TARGETPLATFORM
+ARG TRACER_VERSION TARGETARCH
 RUN echo install dotnet tracer ${TRACER_VERSION} for ${TARGETARCH} \
 && mkdir -p /opt/datadog \
 && mkdir -p /var/log/datadog \
