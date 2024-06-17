@@ -10,8 +10,8 @@ COPY tracer_install.sh /app/tracer_install.sh
 RUN apt-get -y update \
 && apt-get -y install curl
 RUN echo ${TARGETARCH} \
-&& chmod +x /app/tracer_install.sh \
-&& /app/tracer_install.sh ${TRACER_VERSION} ${TARGETARCH}
+&& chmod +x /app/tracer_install.sh
+RUN /app/tracer_install.sh ${TRACER_VERSION} ${TARGETARCH}
 
 FROM --platform=arm64 089465505731.dkr.ecr.ap-southeast-1.amazonaws.com/dotnet8:sdk AS build
 WORKDIR /src
