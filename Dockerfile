@@ -7,6 +7,8 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN uname -m
 ARG TRACER_VERSION TARGETARCH TARGETPLATFORM
 COPY tracer_install.sh /app/tracer_install.sh
+RUN apt-get -y update \
+&& apt-get -y install curl
 RUN echo ${TARGETARCH} \
 && chmod +x /app/tracer_install.sh \
 && /app/tracer_install.sh ${TRACER_VERSION} ${TARGETARCH}
