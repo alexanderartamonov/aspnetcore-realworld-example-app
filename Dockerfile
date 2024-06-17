@@ -8,7 +8,8 @@ RUN uname -m
 ARG TRACER_VERSION
 ARG TARGETARCH
 COPY ${TARGETARCH}.sh ${TARGETARCH}.sh
-RUN /app/${TARGETARCH}.sh ${TRACER_VERSION}
+RUN chmod +x /app/${TARGETARCH}.sh\
+&& /app/${TARGETARCH}.sh ${TRACER_VERSION}
 
 FROM --platform=arm64 089465505731.dkr.ecr.ap-southeast-1.amazonaws.com/dotnet8:sdk AS build
 WORKDIR /src
