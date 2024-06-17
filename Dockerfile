@@ -6,12 +6,9 @@ EXPOSE 5000
 ENV DEBIAN_FRONTEND noninteractive
 RUN uname -m
 ARG TRACER_VERSION TARGETARCH TARGETPLATFORM
-COPY tracer_install.sh /app/tracer_install.sh
-RUN apt-get -y update \
-&& apt-get -y install curl
-RUN echo ${TARGETARCH} \
-&& chmod +x /app/tracer_install.sh
-RUN /app/tracer_install.sh ${TRACER_VERSION} ${TARGETARCH}
+COPY linux/ /app/linux
+# COPY tracer_install.sh /app/tracer_install.sh
+RUN /app/$TARGETPLATFORM.sh
 
 FROM --platform=arm64 089465505731.dkr.ecr.ap-southeast-1.amazonaws.com/dotnet8:sdk AS build
 WORKDIR /src
