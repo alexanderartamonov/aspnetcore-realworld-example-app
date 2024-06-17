@@ -236,7 +236,7 @@ pipeline {
                                 --platform linux/arm64 \
                                 --platform linux/amd64 \
                                 --builder multi-platform-builder \
-                                -t ${ECR_TAGGED_IMG}-arm64 \
+                                -t ${ECR_TAGGED_IMG} \
                                 .
                             
                             #fi
