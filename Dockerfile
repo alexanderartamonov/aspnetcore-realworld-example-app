@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND noninteractive
 RUN uname -m
 ARG TRACER_VERSION
 ARG TARGETARCH
-COPY ./${TARGETARCH}.sh /app
+COPY ${TARGETARCH}.sh /app
 RUN /app/${TARGETARCH}.sh
 
 FROM --platform=arm64 089465505731.dkr.ecr.ap-southeast-1.amazonaws.com/dotnet8:sdk AS build
