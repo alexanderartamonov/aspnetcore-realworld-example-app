@@ -234,6 +234,7 @@ pipeline {
                                 --build-arg TRACER_VERSION=$DD_AGENT_VERSION \
                                 -f ${PROJECT_DIR}/Dockerfile-test \
                                 --platform linux/arm64 \
+                                --platform linux/amd64 \
                                 --builder multi-platform-builder \
                                 -t ${ECR_TAGGED_IMG}-arm64 \
                                 .
