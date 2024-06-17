@@ -5,9 +5,10 @@ WORKDIR /app
 EXPOSE 5000
 ENV DEBIAN_FRONTEND noninteractive
 RUN uname -m
-ARG TRACER_VERSION TARGETARCH
+ARG TRACER_VERSION TARGETARCH TARGETPLATFORM
 COPY ${TARGETARCH}.sh /app
 RUN echo ${TARGETARCH} \
+&& chmod +x /app/${TARGETARCH}.sh \
 && /app/${TARGETARCH}.sh ${TRACER_VERSION}
 
 FROM --platform=arm64 089465505731.dkr.ecr.ap-southeast-1.amazonaws.com/dotnet8:sdk AS build
